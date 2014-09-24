@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+    <name>deiis_types</name>
+    <description/>
+    <version>1.0</version>
+    <vendor/>
+  <types>
+    <typeDescription>
+      <name>edu.cmu.deiis.types.Annotation</name>
+      <description>It is the super class for all the other subclasses that will be added into the system. The two common features of Annotation class is necessary to share among all its subclasses.</description>
+      <supertypeName>uima.tcas.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>casProcessorId</name>
+          <description/>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>confidence</name>
+          <description/>
+          <rangeTypeName>uima.cas.Double</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
+      <name>edu.cmu.deiis.types.SentenceAnnotation</name>
+      <description>Basically, the system gets the input of a UIMA CAS, which is transformed from a text file given by the file path and name. Then the whole input is broken down to two levels: the sentence level and gene level. The sentence level gives its corresponding annotation, the SentenceAnnotation. </description>
+      <supertypeName>edu.cmu.deiis.types.Annotation</supertypeName>
+    </typeDescription>
+    <typeDescription>
+      <name>edu.cmu.deiis.types.GeneAnnotation</name>
+      <description>In the gene level, two types of annotations exist, Gene True Answer Annotation and Tagged Gene Annotation. Since they own the common features, Gene Annotation was designed as the parent annotation of the above two types of specific annotations.</description>
+      <supertypeName>edu.cmu.deiis.types.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>id</name>
+          <description/>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
+      <name>edu.cmu.deiis.types.TaggedGeneAnnotation</name>
+      <description>In Tagged Gene Annotation, the annotation extracted from the provided input file was compared with the golden standard answer to get the recall and precision based on textual similarity.</description>
+      <supertypeName>edu.cmu.deiis.types.GeneAnnotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>sentence</name>
+          <description/>
+          <rangeTypeName>edu.cmu.deiis.types.SentenceAnnotation</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
+      <name>edu.cmu.deiis.types.GeneTrueAnswerAnnotation</name>
+      <description>In Gene True Answer Annotation, the gold standard answer was extracted from the provided file to generate “true answer” for our evaluable, which is a task-based standard to compare with the system output and give us the preliminary evaluation of the overall performance of the system. </description>
+      <supertypeName>edu.cmu.deiis.types.GeneAnnotation</supertypeName>
+    </typeDescription>
+  </types>
+</typeSystemDescription>
