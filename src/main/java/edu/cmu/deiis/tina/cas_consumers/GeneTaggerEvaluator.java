@@ -1,6 +1,9 @@
 package edu.cmu.deiis.tina.cas_consumers;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -115,15 +118,18 @@ public class GeneTaggerEvaluator extends CasConsumer_ImplBase {
     printResult();
   }
   
-  private void printResult(){
+  private void printResult() throws FileNotFoundException, UnsupportedEncodingException{
     List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>( res.entrySet() );
     Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
       public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
         return e1.getValue() - e2.getValue();
       }
     });
+
+    PrintWriter writer = new PrintWriter("./src/main/resources/output/text.out", "UTF-8");
     for(int i = 0; i < list.size(); i++)
-      System.out.println(list.get(i).getKey());
+      writer.println(list.get(i).getKey());
+    writer.close();
     
     int bingo = 0;
     int totalP = labeledGeneSet.size();
@@ -133,12 +139,18 @@ public class GeneTaggerEvaluator extends CasConsumer_ImplBase {
       if (trueGeneSet.contains(s))
         bingo++;
     }
+    
+    double recall = (double) bingo / totalR;
+    double precision = (double) bingo / totalP;
+    double f_measure = (double) 2 * recall * precision / (recall + precision);
+    
     System.out.println("----------------------------------------------------");
     System.out.println("****************************************************");
     System.out.println("----------------------------------------------------");
     System.out.println("System Performance Evaluation:");
-    System.out.println("Precision: " + ((double) bingo / totalP));
-    System.out.println("Recall: " + ((double) bingo / totalR));
+    System.out.println("Precision: " + precision);
+    System.out.println("Recall: " + recall);
+    System.out.println("F_measure: " + f_measure);
     System.out.println();
   }
 }
